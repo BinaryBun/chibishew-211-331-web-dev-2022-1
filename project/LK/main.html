@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,400;0,500;1,100&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/style/style.css">
+    <link rel="stylesheet" href="/style/modal.css">
+    <title>Личный кабинет</title>
+</head>
+<body>
+    <div class="main-conteiner">
+        <div class="header">
+            <img src="https://i.pinimg.com/originals/f9/d3/96/f9d396b173452bfc891d070ddc0311e2.png" class="logo">
+            <div class="name">
+                <h1>3,1415926🚪Inc.</h1>
+                <p>Экскурсии по Москве</p>
+            </div>
+            <div class="navigation">
+                <button>Мои заказы</button>
+                <button onclick="window.location='/map/'">Карта</button>
+                <button onclick="window.location='/about/'">О нас</button>
+            </div>
+        </div>
+        <div class="footer">
+            <div id="map" class="map" onclick="window.location='/map/'"></div>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js"></script>
+            <script src="https://www.mapquestapi.com/sdk/leaflet/v2.2/mq-map.js?key=qMCUJubQG9tCfxn0AFK7YZ2hcXkNkVdg"></script>
+            <script src="https://www.mapquestapi.com/sdk/leaflet/v2.2/mq-routing.js?key=qMCUJubQG9tCfxn0AFK7YZ2hcXkNkVdg"></script>
+            <script src="LK/script.js"></script>
+            <div class="content-block">
+                <p><b>Список пешеходных маршрутов</b></p>
+                <table>
+                    <thead>
+                        <tr>
+                          <th scope="col">Название</th>
+                          <th scope="col">Описание</th>
+                          <th scope="col">Подробнее</th>
+                          <th scope="col">Посмотреть маршрут</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{ range .Arr }}
+                            <tr>
+                                <td>{{ index . 1 }}</td>
+                                <td>{{ index . 2 }}</td>
+                                <td>{{ index . 3 }}</td>
+                                <td>
+                                    <button class="route" 
+                                            id onclick="window.location='/route/?data={{index . 4}}|{{index . 5}}'">
+                                        Посмотреть
+                                    </button>
+                                </td>
+                            </tr>
+                        {{ end }}
+                    </tbody>
+                </table>
+            </div>
+            <div class="content-block">
+                <p><b>Доступные гиды</b></p>
+                <table>
+                    <thead>
+                        <tr>
+                          <th scope="col"></th>
+                          <th scope="col">ФИО</th>
+                          <th scope="col">Язык</th>
+                          <th scope="col">Опыт работы</th>
+                          <th scope="col">Цена за час</th>
+                          <th scope="col">Бронь</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><img src="https://www.santarelli.com/wp-content/uploads/2015/11/PROFILE_685x685-02-H-02.png"></td>
+                            <td>Иванов Иван Иванович</td>
+                            <td>Русский</td>
+                            <td>5 лет</td>
+                            <td>300$</td>
+                            <td><button class="bron">Бронировать</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="modal">
+        <div class="modal-window">
+            <button class="btn-close">✖</button>
+            <h1>Оформление заявки</h1>
+            <p>ФИО гида: <b>Гид Александр</b></p>
+            <p>Название маршрута: <b>Название маршрута</b></p>
+            <div class="bron-flex">
+                <div class="label-form">
+                    <label>Дата экскурсии</label><br>
+                    <input type="date" id="date">
+                </div>
+                <div class="label-form">
+                    <label>Время начала</label><br>
+                    <input type="time" id="time">
+                </div>
+                <div class="label-form">
+                    <label>Длительность экскурсии</label><br>
+                    <input id="cout-time">
+                </div>
+                <div class="label-form">
+                    <label>Количество человек</label><br>
+                    <input id="peoples">
+                </div>
+            </div>
+            <p><b>Дополнительные опции</b></p>
+            <div class="dop-options">
+                <div>
+                    <p><input type="checkbox">Опция</p>
+                    <p>Описание опции<br>Размер скидки</p>
+                </div>
+                <div>
+                    <p><input type="checkbox">Опция</p>
+                    <p>Описание опции<br>Размер скидки</p>
+                </div>
+            </div>
+            <p>Итоговая стоимость: </p>
+            <div class="buttons">
+                <button>Отменить</button>
+                <button>Отправить</button>
+            </div>
+        </div>
+
+        <div class="overlay"></div>
+    </div>
+    <script src="LK/modal.js"></script>
+</body>
+</html>
