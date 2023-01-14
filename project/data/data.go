@@ -14,12 +14,17 @@ import (
 }*/
 
 type Routes struct {
-	Arr [][]string
+	Arr   [][]string
+	Guids [][]string
 }
 
 type Location struct {
 	Start string
 	Stop  string
+}
+
+type Orders struct {
+	Arr [][]string
 }
 
 const letterBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -51,15 +56,20 @@ func (r *Routes) GetAll() {
 		"Москва, Пресненская набережная, 6с2, 123112",
 		"Красная площадь, 7, Москва",
 	})
-	/*for i := 0; i < 10; i++ {
-		tmp := []string{
-			fmt.Sprintf("%v", time.Now().UnixNano()), // id
-			RandStringBytes(10),                      // Name
-			RandStringBytes(10),                      // Description
-			RandStringBytes(10),                      // MainObject
-			"ул. Прянишникова, 2А, Москва, 125008", // start
-			"1-Y Baltiyskiy Pereulok",              // stop
-		}
-		r.Arr = append(r.Arr, tmp)
-	}*/
+
+	r.Guids = [][]string{}
+	r.Guids = append(r.Guids, []string{
+		"Иванов Иван Обрамович",
+		"Русский",
+		"5 лет",
+		"1000",
+		"Сити-Кремль",
+	})
+	r.Guids = append(r.Guids, []string{
+		"Анна Аркадьевна Каренина",
+		"Русский",
+		"10 лет",
+		"1500",
+		"Кремль-Арбат",
+	})
 }

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,400;0,500;1,100&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/style/style.css">
+    <title>Карта</title>
+</head>
+<body>
+    <div class="main-conteiner">
+        <div class="header">
+            <img src="https://i.pinimg.com/originals/f9/d3/96/f9d396b173452bfc891d070ddc0311e2.png" class="logo">
+            <div class="name">
+                <h1>Алые паруса</h1>
+                <p>Экскурсии по Москве</p>
+            </div>
+            <div class="navigation">
+                <button onclick="window.location='/'">Назад</button>
+                <button onclick="window.location='/map/'">Карта</button>
+                <button onclick="window.location='/about/'">О нас</button>
+            </div>
+        </div>
+        <div class="footer_map">
+            <div class="table">
+                <h1>Оставленные заявки</h1>
+                <table>
+                    <thead>
+                        <tr>
+                          <th scope="col">№</th>
+                          <th scope="col">Название маршрута</th>
+                          <th scope="col">Дата</th>
+                          <th scope="col">Стоимость</th>
+                          <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{ range $item, $key := .Arr }}
+                            <tr>
+                                <td>{{ $item }}</td>
+                                <td>{{ index $key 1 }}</td>
+                                <td>{{ index $key 2 }}</td>
+                                <td>{{ index $key 6 }}</td>
+                                <td class="chouse">
+                                        <p>👁</p>
+                                        <p>✎</p>
+                                        <p>🗑</p>
+                                </td>
+                            </tr>
+                        {{ end }}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
