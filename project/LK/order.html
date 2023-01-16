@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,400;0,500;1,100&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/style/style.css">
     <link rel="stylesheet" href="/style/modal.css">
-    <title>Карта</title>
+    <title>Заказы</title>
 </head>
 <body>
     <div class="main-conteiner">
@@ -46,12 +46,19 @@
                                 <td>{{ index $key 7 }}</td>
                                 <td>
                                     <div class="chouse">
-                                        <button>👁</button>
+                                        <button class="viuew">👁</button>
                                         <button class="edit">✎</button>
                                         <button class="delete" id="{{ index $key 0 }}">🗑</button>
                                         <p class="guid-name ghoste">{{ index $key 1 }}</p>
                                         <p class="route-name ghoste">{{ index $key 2 }}</p>
+                                        <p class="date ghoste">{{ index $key 3 }}</p>
+                                        <p class="time ghoste">{{ index $key 4 }}</p>
+                                        <p class="duration ghoste">{{ index $key 5 }}</p>
+                                        <p class="persons ghoste">{{ index $key 6 }}</p>
                                         <p class="price ghoste">{{ index $key 7 }}</p>
+                                        <p class="optionFirst ghoste">{{ index $key 8 }}</p>
+                                        <p class="optionSecond ghoste">{{ index $key 9 }}</p>
+                                        <p class="start_price ghoste">{{ index $key 10 }}</p>
                                     </div>
                                 </td>
                             </tr>
