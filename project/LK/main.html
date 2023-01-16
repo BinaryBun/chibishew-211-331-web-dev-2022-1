@@ -78,7 +78,7 @@
                             <td>{{ index . 0 }}</td>
                             <td>{{ index . 1 }}</td>
                             <td>{{ index . 2 }}</td>
-                            <td>{{ index . 3 }}₽</td>
+                            <td><p class="price-hour">{{ index . 3 }}</p></td>
                             <td><button class="bron" value="{{ index . 0 }}|{{ index . 4 }}">Бронировать</button></td>
                         </tr>
                         {{ end }}
@@ -104,11 +104,11 @@
                 </div>
                 <div class="label-form">
                     <label>Длительность экскурсии</label><br>
-                    <input class="cout-time-input" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+                    <input class="count-time-input">
                 </div>
                 <div class="label-form">
                     <label>Количество человек</label><br>
-                    <input class="peoples-input" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+                    <input class="peoples-input">
                 </div>
             </div>
             <p><b>Дополнительные опции</b></p>

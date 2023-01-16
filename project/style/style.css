@@ -221,6 +221,13 @@ td > img {
     flex-direction: row;
     font-size: 100%;
 }
-.chouse > p {
+.chouse > button {
     margin: 0;
+    background-color: transparent;
+    border: 0;
+    color: #fdfdff;
+}
+
+.ghoste {
+    display: none;
 }

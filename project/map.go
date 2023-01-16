@@ -58,10 +58,10 @@ func route(w http.ResponseWriter, r *http.Request) {
 }
 
 func orders(w http.ResponseWriter, r *http.Request) {
-	u := data.Orders{[][]string{}}
+	u := data.Orders{Arr: [][]string{}}
 	for _, c := range r.Cookies() {
 		c.Value, _ = url.PathUnescape(c.Value)
-		if strings.Contains(c.Name, "order") && len(strings.Split(c.Value, "|")) == 10 {
+		if strings.Contains(c.Name, "order") && len(strings.Split(c.Value, "|")) == 11 {
 			u.Arr = append(u.Arr, getCookiesList(r, strings.Replace(c.Name, "order", "", -1)))
 		}
 	}
@@ -128,7 +128,7 @@ func getOrders(w http.ResponseWriter, r *http.Request) {
 	response := []M{}
 	for _, c := range r.Cookies() {
 		c.Value, _ = url.PathUnescape(c.Value)
-		if strings.Contains(c.Name, "order") && len(strings.Split(c.Value, "|")) == 10 {
+		if strings.Contains(c.Name, "order") && len(strings.Split(c.Value, "|")) == 11 {
 			tmp_list := strings.Split(c.Value, "|")
 			response = append(response, M{
 				"id":           strings.Replace(c.Name, "order", "", -1),
@@ -159,8 +159,10 @@ func addOrders(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 
-	response := fmt.Sprintf("%s|%s|%s|%s|%s|%s|%s|%s|%s|%s",
-		rou.GuideId,
+	uuidString := uuid.New().String()
+	response := fmt.Sprintf("%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s",
+		uuidString,
+		strings.Replace(rou.GuideId, "+", " ", -1),
 		rou.RouteId,
 		rou.Date,
 		rou.Time,
@@ -171,9 +173,11 @@ func addOrders(w http.ResponseWriter, r *http.Request) {
 		rou.OptionSecond,
 		rou.StudentId)
 
+	fmt.Println(response)
+
 	//set cookie
 	cookie := &http.Cookie{
-		Name:     "order" + uuid.New().String(),
+		Name:     "order" + uuidString,
 		Value:    url.QueryEscape(response),
 		Path:     "/",
 		HttpOnly: true,
@@ -248,7 +252,7 @@ func getOrderInfo(w http.ResponseWriter, r *http.Request) {
 	response := []M{}
 	for _, c := range r.Cookies() {
 		c.Value, _ = url.PathUnescape(c.Value)
-		if c.Name == ("order"+id) && len(strings.Split(c.Value, "|")) == 10 {
+		if c.Name == ("order"+id) && len(strings.Split(c.Value, "|")) == 11 {
 			tmp_list := strings.Split(c.Value, "|")
 			response = append(response, M{
 				"id":           strings.Replace(c.Name, "order", "", -1),
@@ -313,13 +317,13 @@ func run() {
 
 	// api
 	rout.HandleFunc("/api/routes/", getRoutests).Methods("GET")
-	rout.HandleFunc("/api/routes/{id:[0-9]+}/guides/", getGuides).Methods("GET")
+	rout.HandleFunc("/api/routes/{id:[-a-z0-9]+}/guides/", getGuides).Methods("GET")
 	rout.HandleFunc("/api/orders/", getOrders).Methods("GET")
 	rout.HandleFunc("/api/orders/", addOrders).Methods("POST")
-	rout.HandleFunc("/api/orders/{id:[0-9]+}", putOrders).Methods("PUT")
-	rout.HandleFunc("/api/orders/{id:[0-9]+}", deleteOrders).Methods("DELETE")
-	rout.HandleFunc("/api/orders/{id:[0-9]+}", getOrderInfo).Methods("GET")
-	rout.HandleFunc("/api/guides/{id:[0-9]+}/", getGuideInfo).Methods("GET")
+	rout.HandleFunc("/api/orders/{id:[-a-z0-9]+}", putOrders).Methods("PUT")
+	rout.HandleFunc("/api/orders/{id:[-a-z0-9]+}", deleteOrders).Methods("DELETE")
+	rout.HandleFunc("/api/orders/{id:[-a-z0-9]+}", getOrderInfo).Methods("GET")
+	rout.HandleFunc("/api/guides/{id:[-a-z0-9]+}/", getGuideInfo).Methods("GET")
 
 	http.Handle("/", rout) // перенаправление на роутер
 	http.ListenAndServe(":8080", nil)
