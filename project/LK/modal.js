@@ -144,6 +144,8 @@ function getPrice(startPrice, mainDiv) {
         time = parseInt(time.split(':')[0]);
         var day = new Date(String(date)).getDay()
 
+        if (!(hours > 0)) { hours = 1; }
+        
         if (day == 0 || day == 6) {
             day = 1.5
         } else {
@@ -188,6 +190,7 @@ function getPrice(startPrice, mainDiv) {
         } else {
             time = 0;
         }
+        console.log(startPrice, day, hours, persons, time, op1, op2);
 
         mainDiv.getElementsByClassName("price")[0].value = startPrice;
         mainDiv.getElementsByClassName("price")[0].innerHTML = (startPrice * day * hours + persons + time) * op1 * op2;
