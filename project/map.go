@@ -127,16 +127,16 @@ func getGuides(w http.ResponseWriter, r *http.Request) {
 
 	if len(response) == 0 {
 		response = append(response, M{
-			"name":           "Анна Аркадьевна Каренина",
+			"name":           "Анна Казанцева",
 			"workExperience": "10 лет",
 			"language":       "Русский",
 			"pricePerHour":   "1500",
-			"route":          "Кремль-Арбат",
+			"route":          "Зоопарк-Арбат",
 		})
 		response = append(response, M{
-			"name":           "Иванов Иван Обрамович",
+			"name":           "Падева Татьяна Владимировна",
 			"workExperience": "5 лет",
-			"language":       "Русский",
+			"language":       "Английский",
 			"pricePerHour":   "1000",
 			"route":          "Сити-Кремль",
 		})
@@ -211,51 +211,36 @@ func addOrders(w http.ResponseWriter, r *http.Request) {
 }
 
 func putOrders(w http.ResponseWriter, r *http.Request) {
-	id := mux.Vars(r)["id"]
-
-	cookie, _ := r.Cookie("order" + id)
-	cookie.Value, _ = url.PathUnescape(cookie.Value)
-	cookie_list := strings.Split(cookie.Value, "|")
-
-	if r.URL.Query().Get("guide_id") != "" {
-		cookie_list[0] = r.URL.Query().Get("guide_id")
-	}
-	if r.URL.Query().Get("route_id") != "" {
-		cookie_list[0] = r.URL.Query().Get("route_id")
-	}
-	if r.URL.Query().Get("date") != "" {
-		cookie_list[0] = r.URL.Query().Get("date")
-	}
-	if r.URL.Query().Get("time") != "" {
-		cookie_list[0] = r.URL.Query().Get("time")
-	}
-	if r.URL.Query().Get("duration") != "" {
-		cookie_list[0] = r.URL.Query().Get("duration")
-	}
-	if r.URL.Query().Get("persons") != "" {
-		cookie_list[0] = r.URL.Query().Get("persons")
-	}
-	if r.URL.Query().Get("price") != "" {
-		cookie_list[0] = r.URL.Query().Get("price")
-	}
-	if r.URL.Query().Get("optionFirst") != "" {
-		cookie_list[0] = r.URL.Query().Get("optionFirst")
-	}
-	if r.URL.Query().Get("optionSecond") != "" {
-		cookie_list[0] = r.URL.Query().Get("optionSecond")
-	}
-	if r.URL.Query().Get("student_id") != "" {
-		cookie_list[0] = r.URL.Query().Get("student_id")
+	decoder := json.NewDecoder(r.Body)
+	var rou Route
+	if err := decoder.Decode(&rou); err != nil {
+		panic(err)
 	}
 
-	cookieSetting := &http.Cookie{
-		Name:     "order" + id,
-		Value:    strings.Join(cookie_list, "|"),
+	response := fmt.Sprintf("%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s",
+		mux.Vars(r)["id"],
+		strings.Replace(rou.GuideId, "+", " ", -1),
+		rou.RouteId,
+		rou.Date,
+		rou.Time,
+		rou.Duration,
+		rou.Persons,
+		rou.Price,
+		rou.OptionFirst,
+		rou.OptionSecond,
+		rou.StudentId)
+
+	fmt.Println(response)
+
+	//set cookie
+	cookie := &http.Cookie{
+		Name:     "order" + mux.Vars(r)["id"],
+		Value:    url.QueryEscape(response),
 		Path:     "/",
 		HttpOnly: true,
 	}
-
-	http.SetCookie(w, cookieSetting)
+	http.SetCookie(w, cookie)
+	fmt.Println("cookies is setting")
 }
 
 func deleteOrders(w http.ResponseWriter, r *http.Request) {

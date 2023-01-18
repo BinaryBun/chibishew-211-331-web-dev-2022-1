@@ -16,6 +16,7 @@ for (var i = 0; i < btn.length; i++) {
         routr.innerHTML = data_list[1];
         price.innerHTML = this.parentNode.parentNode.getElementsByClassName("price-hour")[0].innerHTML;
         modal.style.display = "flex";
+        modal.getElementsByClassName("btn-send")[0].id = "";
 
         getPrice(modal.getElementsByClassName("price")[0].innerHTML, modal)
     }
@@ -23,6 +24,7 @@ for (var i = 0; i < btn.length; i++) {
 
 for (var i = 0; i < edit.length; i++) {
     edit[i].onclick = function() {
+        clearModal()
         var guid = modal.getElementsByClassName("guid-name")[0];
         var routr = modal.getElementsByClassName("route-name")[0];
         var price = modal.getElementsByClassName("price")[0];
@@ -44,6 +46,8 @@ for (var i = 0; i < edit.length; i++) {
         op1.checked = (this.parentNode.getElementsByClassName("optionFirst")[0].innerHTML === 'true');
         op2.checked = (this.parentNode.getElementsByClassName("optionSecond")[0].innerHTML === 'true');
         modal.style.display = "flex";
+        modal.getElementsByClassName("btn-send")[0].id = "edit";
+        modal.getElementsByClassName("btn-send")[0].value = this.id;
 
         getPrice(this.parentNode.getElementsByClassName("start_price")[0].innerHTML, modal)
     }
@@ -72,29 +76,53 @@ for (var i = 0; i < send.length; i++) {
         var price = mainDiv.getElementsByClassName("price")[0].innerHTML;
         
         console.log(guid);
-        // send post fetch
-        fetch("/api/orders/", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                "date": date,
-                "time": time,
-                "guide_id": guid,
-                "duration": counTime,
-                "persons": peoples,
-                "option_first": op1.toString(),
-                "option_second": op2.toString(),
-                "route_id": routeName,
-                "price": price,
-                "student_id": mainDiv.getElementsByClassName("price")[0].value
+        if (this.id == "edit") {
+            uuid = this.value
+            fetch("/api/orders/" + uuid, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    "date": date,
+                    "time": time,
+                    "guide_id": guid,
+                    "duration": counTime,
+                    "persons": peoples,
+                    "option_first": op1.toString(),
+                    "option_second": op2.toString(),
+                    "route_id": routeName,
+                    "price": price,
+                    "student_id": mainDiv.getElementsByClassName("price")[0].value
+                })
             })
-        })
-        .then(function() {
-            window.location.href = "/order/";
-        })
-        
+            .then(function() {
+                window.location.href = "/order/";
+            })
+        } else {
+            // send post fetch
+            fetch("/api/orders/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    "date": date,
+                    "time": time,
+                    "guide_id": guid,
+                    "duration": counTime,
+                    "persons": peoples,
+                    "option_first": op1.toString(),
+                    "option_second": op2.toString(),
+                    "route_id": routeName,
+                    "price": price,
+                    "student_id": mainDiv.getElementsByClassName("price")[0].value
+                })
+            })
+            .then(function() {
+                window.location.href = "/order/";
+            })
+        }  
     }
 }
 
@@ -111,6 +139,8 @@ function getPrice(startPrice, mainDiv) {
         var persons = parseInt(mainDiv.getElementsByClassName("peoples-input")[0].value)
         var date = mainDiv.getElementsByClassName("date-input")[0].value
         var time = String(mainDiv.getElementsByClassName("time-input")[0].value)
+        var op1 = mainDiv.getElementsByClassName("opt-1")[0]
+        var op2 = mainDiv.getElementsByClassName("opt-2")[0]
         time = parseInt(time.split(':')[0]);
         var day = new Date(String(date)).getDay()
 
@@ -119,9 +149,7 @@ function getPrice(startPrice, mainDiv) {
         } else {
             day = 1
         }
-        
-        if (!(hours > 0)) { hours = 1; }
-        
+
         if (!(persons > 0)) { 
             persons = 0; 
         } else if (persons > 0 && persons < 5 ) { 
@@ -129,7 +157,27 @@ function getPrice(startPrice, mainDiv) {
         } else if (persons >= 5 && persons < 10) {
             persons = 1000
         } else if (persons >= 10 && persons <= 20) {
+            op1.checked = false;
+            op1.readOnly = true;
             persons = 1500
+        }
+
+        if (op1.checked) {
+            if (persons == 0) {
+                op1 = 1.15;
+            } else if (persons == 1000) {
+                op1 = 1.25;
+            } else {
+                op1 = 1;
+            }
+        } else {
+            op1 = 1;
+        }
+
+        if (op2.checked) {
+            op2 = 1.3;
+        } else {
+            op2 = 1;
         }
 
         console.log(time >= 20 && time <= 23);
@@ -142,10 +190,30 @@ function getPrice(startPrice, mainDiv) {
         }
 
         mainDiv.getElementsByClassName("price")[0].value = startPrice;
-        mainDiv.getElementsByClassName("price")[0].innerHTML = startPrice * day * hours + persons + time;
+        mainDiv.getElementsByClassName("price")[0].innerHTML = (startPrice * day * hours + persons + time) * op1 * op2;
     }
     mainDiv.getElementsByClassName("count-time-input")[0].oninput = template;
     mainDiv.getElementsByClassName("peoples-input")[0].oninput = template;
     mainDiv.getElementsByClassName("date-input")[0].oninput = template;
     mainDiv.getElementsByClassName("time-input")[0].oninput = template;
+    mainDiv.getElementsByClassName("opt-1")[0].onchange = template;
+    mainDiv.getElementsByClassName("opt-2")[0].onchange = template;
+}
+
+function clearModal() {
+    var date = modal.getElementsByClassName("date-input")[0];
+    var time = modal.getElementsByClassName("time-input")[0];
+    var persons = modal.getElementsByClassName("peoples-input")[0];
+    var timeCount = modal.getElementsByClassName("count-time-input")[0];
+    var op1 = modal.getElementsByClassName("opt-1")[0];
+    var op2 = modal.getElementsByClassName("opt-2")[0];
+
+    // atter
+    date.readOnly = false;
+    time.readOnly = false;
+    persons.readOnly = false;
+    timeCount.readOnly = false;
+    op1.onclick = function () { return true; };
+    op2.onclick = function () { return true; };
+    modal.getElementsByClassName("buttons")[0].style.display = "flex";
 }

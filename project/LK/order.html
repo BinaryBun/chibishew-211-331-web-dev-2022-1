@@ -47,7 +47,7 @@
                                 <td>
                                     <div class="chouse">
                                         <button class="viuew">👁</button>
-                                        <button class="edit">✎</button>
+                                        <button class="edit" id="{{ index $key 0 }}">✎</button>
                                         <button class="delete" id="{{ index $key 0 }}">🗑</button>
                                         <p class="guid-name ghoste">{{ index $key 1 }}</p>
                                         <p class="route-name ghoste">{{ index $key 2 }}</p>
@@ -96,12 +96,12 @@
             <p><b>Дополнительные опции</b></p>
             <div class="dop-options">
                 <div>
-                    <p><input type="checkbox" class="opt-1">Опция</p>
-                    <p>Описание опции<br>Размер скидки</p>
+                    <p><input type="checkbox" class="opt-1">Сопровождение сурдопереводчика</p>
+                    <p>Увеличивает стоимость на <br>15%, если посетителей от 1 до 5,<br>на 25%, если от 5 до 10.</p>
                 </div>
                 <div>
-                    <p><input type="checkbox" class="opt-2">Опция</p>
-                    <p>Описание опции<br>Размер скидки</p>
+                    <p><input type="checkbox" class="opt-2">Быстрый выезд гида (в течение часа)</p>
+                    <p>Повышает стоимость на 30%.</p>
                 </div>
             </div>
             <p>Итоговая стоимость: <b class="price">0</b></p>

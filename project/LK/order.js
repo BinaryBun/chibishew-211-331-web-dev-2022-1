@@ -36,6 +36,7 @@ for (var i = 0; i < onViuew.length; i++) {
         timeCount.readOnly = true;
         op1.onclick = function () { return false; };
         op2.onclick = function () { return false; };
+        modal.getElementsByClassName("buttons")[0].style.display = "none";
 
         guid.innerHTML = this.parentNode.getElementsByClassName("guid-name")[0].innerHTML.replaceAll("+", " ");
         routr.innerHTML = this.parentNode.getElementsByClassName("route-name")[0].innerHTML;
@@ -47,6 +48,7 @@ for (var i = 0; i < onViuew.length; i++) {
         op1.checked = (this.parentNode.getElementsByClassName("optionFirst")[0].innerHTML === 'true');
         op2.checked = (this.parentNode.getElementsByClassName("optionSecond")[0].innerHTML === 'true');
         modal.style.display = "flex";
+        modal.getElementsByClassName("btn-send")[0].id = "";
     };
 
 }
