@@ -231,3 +231,11 @@ td > img {
 .ghoste {
     display: none;
 }
+
+.pag {
+    display: grid;
+    grid-template-columns: auto auto;
+    justify-content: center;
+    align-items: center;
+    column-gap: 1vh;
+}

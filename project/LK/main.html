@@ -32,6 +32,12 @@
             <script src="LK/script.js"></script>
             <div class="content-block">
                 <p><b>Список пешеходных маршрутов</b></p>
+                <input type="text" id="inut-route">
+                <select id="select-route">
+                    <option value="0">Название</option>
+                    <option value="1">Описание</option>
+                    <option value="2">Подробнее</option>
+                </select>
                 <table>
                     <thead>
                         <tr>
@@ -43,10 +49,10 @@
                     </thead>
                     <tbody>
                         {{ range .Arr }}
-                            <tr>
-                                <td>{{ index . 1 }}</td>
-                                <td>{{ index . 2 }}</td>
-                                <td>{{ index . 3 }}</td>
+                            <tr class="tr-route">
+                                <td class="td-select">{{ index . 1 }}</td>
+                                <td class="td-select">{{ index . 2 }}</td>
+                                <td class="td-select">{{ index . 3 }}</td>
                                 <td>
                                     <button class="route" 
                                             id onclick="window.location='/route/?data={{index . 4}}|{{index . 5}}'">
@@ -57,9 +63,20 @@
                         {{ end }}
                     </tbody>
                 </table>
+                <div class="pag">
+                    <input id="pg1" min="1" max="3" placeholder="Номер страницы" value="1">
+                    <p id="pg1-p">из 3</p>
+                </div>
             </div>
             <div class="content-block">
                 <p><b>Доступные гиды</b></p>
+                <input type="text" id="inut-guides">
+                <select id="select">
+                    <option value="0">ФИО</option>
+                    <option value="1">Язык</option>
+                    <option value="2">Опыт работы</option>
+                    <option value="3">Цена за час</option>
+                </select>
                 <table>
                     <thead>
                         <tr>
@@ -71,14 +88,14 @@
                           <th scope="col">Бронь</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="guides">
                         {{ range .Guids}}
-                        <tr>
+                        <tr class="tr-guid">
                             <td><img src="https://www.santarelli.com/wp-content/uploads/2015/11/PROFILE_685x685-02-H-02.png"></td>
-                            <td>{{ index . 0 }}</td>
-                            <td>{{ index . 1 }}</td>
-                            <td>{{ index . 2 }}</td>
-                            <td><p class="price-hour">{{ index . 3 }}</p></td>
+                            <td class="td-select"></td>
+                            <td class="td-select"></td>
+                            <td class="td-select"></td>
+                            <td><p class="price-hour td-select" id="pricePerHour"></p></td>
                             <td><button class="bron" value="{{ index . 0 }}|{{ index . 4 }}">Бронировать</button></td>
                         </tr>
                         {{ end }}
@@ -131,6 +148,13 @@
 
         <div class="overlay"></div>
     </div>
+    <script src="LK/load-data.js"></script>
     <script src="LK/modal.js"></script>
+    <script src="LK/filter.js"></script>
+    <script src="LK/pagination.js"></script>
+    <script defer>
+        document.getElementById("pg1").oninput();
+        lodData();
+    </script>
 </body>
 </html>

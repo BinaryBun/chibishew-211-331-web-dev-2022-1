@@ -1,6 +1,6 @@
 var modal = document.getElementsByClassName("modal")[0];
 var btn = document.getElementsByClassName("bron");
-var edit = document.getElementsByClassName("edit")
+var edit = document.getElementsByClassName("edit");
 var close = document.getElementsByClassName("btn-close");
 var cancel = document.getElementsByClassName("btn-cancel");
 var send = document.getElementsByClassName("btn-send");
@@ -73,7 +73,7 @@ for (var i = 0; i < send.length; i++) {
         
         console.log(guid);
         // send post fetch
-        fetch("http://192.168.31.104:8080/api/orders/", {
+        fetch("/api/orders/", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

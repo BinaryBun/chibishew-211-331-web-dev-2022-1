@@ -29,6 +29,13 @@ type Route struct {
 	StudentId    string `json:"student_id"`
 }
 
+type Guides struct {
+	Name         string `json:"name"`
+	Lang         string `json:"lang"`
+	PricePerHour string `json:"price_per_hour"`
+	RouteId      string `json:"route_route`
+}
+
 func homePage(w http.ResponseWriter, _ *http.Request) {
 	u := data.Routes{}
 	u.GetAll()
@@ -116,6 +123,23 @@ func getGuides(w http.ResponseWriter, r *http.Request) {
 				"pricePerHour":   tmp_list[3],
 			})
 		}
+	}
+
+	if len(response) == 0 {
+		response = append(response, M{
+			"name":           "Анна Аркадьевна Каренина",
+			"workExperience": "10 лет",
+			"language":       "Русский",
+			"pricePerHour":   "1500",
+			"route":          "Кремль-Арбат",
+		})
+		response = append(response, M{
+			"name":           "Иванов Иван Обрамович",
+			"workExperience": "5 лет",
+			"language":       "Русский",
+			"pricePerHour":   "1000",
+			"route":          "Сити-Кремль",
+		})
 	}
 
 	data, _ := json.Marshal(response)
@@ -317,7 +341,7 @@ func run() {
 
 	// api
 	rout.HandleFunc("/api/routes/", getRoutests).Methods("GET")
-	rout.HandleFunc("/api/routes/{id:[-a-z0-9]+}/guides/", getGuides).Methods("GET")
+	rout.HandleFunc("/api/guides/", getGuides).Methods("GET")
 	rout.HandleFunc("/api/orders/", getOrders).Methods("GET")
 	rout.HandleFunc("/api/orders/", addOrders).Methods("POST")
 	rout.HandleFunc("/api/orders/{id:[-a-z0-9]+}", putOrders).Methods("PUT")
